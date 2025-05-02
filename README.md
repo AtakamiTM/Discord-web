@@ -1,7 +1,3 @@
-Here's the updated version of the project description for your GitHub README:
-
----
-
 # Discord UI Recreation
 
 This project aims to recreate the user interface of the popular communication application, Discord. Using HTML, CSS, and JavaScript, a visual copy of the main UI elements has been created to mimic the structure and layout of the app. The following components have been implemented:
@@ -19,7 +15,3 @@ This project aims to recreate the user interface of the popular communication ap
 * HTML
 * CSS
 * JavaScript
-
----
-
-Let me know if you need any further edits!
