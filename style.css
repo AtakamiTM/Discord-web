@@ -1,0 +1,556 @@
+/* Podstawowy reset i czcionka */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Czcionka podobna do Discorda */
+  background-color: #36393f; /* Główne tło Discorda */
+  color: #dcddde; /* Domyślny kolor tekstu */
+  overflow: hidden; /* Zapobiega przewijaniu całej strony */
+}
+
+.discord-container {
+  display: flex;
+  height: 100vh; /* Cała wysokość okna */
+}
+
+/* ----- Lista Serwerów ----- */
+.server-list {
+  width: 72px;
+  background-color: #202225; /* Ciemniejsze tło dla listy serwerów */
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto; /* Przewijanie, jeśli jest dużo serwerów */
+  flex-shrink: 0; /* Zapobiega kurczeniu się */
+}
+
+.server-icon {
+  width: 50px;
+  height: 50px;
+  background-color: #36393f; /* Tło ikon serwerów */
+  border-radius: 80%; /* Okrągłe ikony */
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: border-radius 0.15s ease-out, background-color 0.15s ease-out;
+  position: relative; /* Dla wskaźnika aktywnego serwera */
+}
+
+.server-icon img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover; /* Dopasowanie obrazka */
+}
+
+
+.server-icon:hover {
+  border-radius: 16px; /* Zaokrąglenie przy najechaniu */
+  background-color: #36393f; /* Kolor akcentu Discorda */
+}
+.server-icon.active-server {
+   border-radius: 16px; /* Aktywny serwer ma już zaokrąglenie */
+   background-color: #36393f;
+}
+.server-icon.active-server::before { /* Wskaźnik aktywnego serwera */
+  content: '';
+  position: absolute;
+  left: -12px; /* Pozycjonowanie paska */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 40px; /* Wysokość paska - dostosuj */
+  background-color: white;
+  border-radius: 0 4px 4px 0;
+}
+.server-icon.active-server:hover::before { /* Dostosuj dla hover */
+   height: 20px;
+}
+
+
+.server-icon.add-server {
+  background-color: #36393f;
+  color: #43B581; /* Zielony Discorda */
+  font-size: 24px;
+}
+.server-icon.add-server:hover {
+  background-color: #43B581;
+  color: white;
+}
+
+/* ----- Lista Kanałów ----- */
+.channel-list {
+  width: 240px;
+  background-color: #2f3136; /* Tło listy kanałów */
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0; /* Zapobiega kurczeniu się */
+}
+
+.server-name {
+  padding: 18px 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.2); /* Subtelna linia */
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+.server-name i {
+  float: right; /* Ikona strzałki po prawej */
+  font-size: 12px;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+.channels {
+  flex-grow: 1; /* Zajmuje dostępną przestrzeń */
+  padding: 18px 8px 0 16px;
+  overflow-y: auto; /* Przewijanie */
+}
+.category-header {
+  color: #8e9297; /* Szary kolor nagłówków */
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  padding-right: 8px;
+  display: flex;
+  align-items: center;
+}
+.icon-small {
+  font-size: 10px;
+  margin-right: 4px;
+  opacity: 0.6;
+}
+
+.channel-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  margin-bottom: 2px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #8e9297; /* Domyślny kolor kanału */
+  font-weight: 500;
+}
+.channel-item:hover {
+  background-color: rgba(79,84,92,0.32); /* Tło przy najechaniu */
+  color: #dcddde; /* Jaśniejszy tekst przy najechaniu */
+}
+.channel-item.active-channel {
+  background-color: rgba(79,84,92,0.6); /* Aktywny kanał */
+  color: #fff; /* Biały tekst dla aktywnego */
+}
+.icon-channel {
+  margin-right: 6px;
+  font-size: 16px; /* Rozmiar ikon kanałów */
+  width: 18px; /* Stała szerokość dla wyrównania */
+  text-align: center;
+  opacity: 0.4; /* Lekko przygaszone ikony */
+}
+.channel-item.active-channel .icon-channel {
+  opacity: 1; /* Pełna widoczność ikony aktywnego */
+}
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-wrapper::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #2f3136; /* kolor tła listy użytkowników */
+}
+
+.avatar-wrapper.online::after {
+  background-color: #43b581;
+}
+
+.avatar-wrapper.idle::after {
+  background-color: #faa61a;
+}
+
+.avatar-wrapper.offline::after {
+  background-color: #747f8d;
+}
+
+.user-info {
+  background-color: #292b2f; /* Ciemniejsze tło paska użytkownika */
+  padding: 8px;
+  display: flex;
+  align-items: center;
+}
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: transparent; /* Domyślny kolor avatara */
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+.rank-admin {
+  color: #f04747; /* czerwony – admin */
+  font-weight: bold;
+}
+.rank-moderator {
+  color: #43b581; /* zielony – moderator */
+}
+.rank-vip {
+  color: #faa61a; /* złoty – VIP */
+}
+.rank-member {
+  color: #7289da; /* niebieski – zwykły użytkownik */
+}
+
+.avatar-placeholder.small-avatar {
+  width: 32px;
+  height: 32px;
+}
+.user-name-tag {
+  flex-grow: 1; /* Zajmuje dostępną przestrzeń */
+  font-size: 14px;
+  line-height: 1.2;
+}
+.user-name-tag strong {
+  color: #fff;
+  display: block; /* Nazwa użytkownika w nowej linii */
+}
+.user-name-tag span {
+  font-size: 12px;
+  color: #b9bbbe; /* Szary kolor taga */
+}
+.user-controls i {
+  color: #b9bbbe;
+  margin-left: 8px;
+  cursor: pointer;
+  padding: 4px; /* Łatwiej kliknąć */
+  font-size: 16px;
+  opacity: 0.7;
+}
+.user-controls i:hover {
+  opacity: 1;
+  color: #fff;
+}
+
+
+/* ----- Główny Obszar (Czat) ----- */
+.main-content {
+  flex-grow: 1; /* Zajmuje resztę przestrzeni */
+  background-color: #36393f; /* Główne tło */
+  display: flex;
+  flex-direction: column;
+}
+
+.channel-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.2), 0 1.5px 0 rgba(0,0,0,0.05), 0 2px 0 rgba(0,0,0,0.05); /* Cień pod nagłówkiem */
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  flex-shrink: 0; /* Nie kurczy się */
+}
+.header-icon {
+  color: #72767d; /* Szara ikona hash */
+  font-size: 20px;
+  margin-right: 8px;
+}
+.channel-topic {
+  color: #b9bbbe;
+  font-size: 13px;
+  font-weight: 400;
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 1px solid #4f545c; /* Separator */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Ukrywanie długiego tematu */
+  max-width: 30%; /* Ograniczenie szerokości tematu */
+}
+
+.header-icons {
+  margin-left: auto; /* Przesuwa ikony na prawo */
+  display: flex;
+  align-items: center;
+  color: #b9bbbe;
+}
+.header-icons i {
+  margin-left: 16px;
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0.8;
+}
+.header-icons i:hover {
+   opacity: 1;
+   color: #fff;
+}
+.header-icons input[type="text"] {
+  background-color: #202225; /* Ciemne tło wyszukiwarki */
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: #dcddde;
+  font-size: 13px;
+  margin-left: 16px;
+  width: 144px; /* Stała szerokość */
+}
+.header-icons input::placeholder {
+  color: #72767d;
+}
+
+.chat-area {
+  flex-grow: 1; /* Zajmuje dostępną przestrzeń */
+  overflow-y: auto; /* Przewijanie czatu */
+  padding: 16px 16px 0 16px;
+}
+
+.message {
+  display: flex;
+  margin-bottom: 16px;
+  padding: 4px 0; /* Odstęp dla hover */
+}
+.message:hover {
+  background-color: rgba(4,4,5,0.07); /* Lekkie tło przy najechaniu */
+}
+
+.message .avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  margin-right: 16px;
+  margin-top: 4px;
+}
+.avatar-placeholder.other-color {
+  background-color: #43B581; /* Inny kolor dla bota */
+}
+.avatar-placeholder.another-user {
+   background-color: #FAA61A; /* Inny kolor dla innego usera */
+}
+
+
+.message-content {
+  flex-grow: 1;
+}
+.message-content .username {
+  color: #fff; /* Biały nick */
+  font-weight: 500;
+  margin-right: 8px;
+}
+.message-content .timestamp {
+  color: #72767d; /* Szary czas */
+  font-size: 12px;
+  margin-left: 8px;
+}
+.message-content p {
+  line-height: 1.375rem; /* Odstęp między liniami */
+  color: #dcddde; /* Kolor tekstu wiadomości */
+  word-wrap: break-word; /* Zawijanie długich słów */
+}
+.bot-tag {
+  background-color: #7289da;
+  color: #fff;
+  font-size: 10px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 500;
+  vertical-align: baseline;
+  margin-left: 4px;
+}
+.small-bot-tag {
+  font-size: 9px;
+  padding: 0px 3px;
+}
+
+.message-input-area {
+  padding: 0 16px 24px 16px; /* Odstępy pola wpisywania */
+  flex-shrink: 0; /* Nie kurczy się */
+}
+.input-wrapper {
+  background-color: #40444b; /* Tło pola wpisywania */
+  border-radius: 8px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+}
+.input-wrapper input[type="text"] {
+  flex-grow: 1;
+  background: none;
+  border: none;
+  padding: 11px 0; /* Wewnętrzne odstępy */
+  color: #dcddde;
+  font-size: 1rem; /* Rozmiar tekstu w polu */
+  margin: 0 10px;
+}
+.input-wrapper input::placeholder {
+  color: #72767d;
+}
+.input-icon {
+  color: #b9bbbe;
+  font-size: 22px; /* Rozmiar ikon */
+  cursor: pointer;
+  padding: 8px; /* Łatwiej kliknąć */
+}
+.input-icon:hover {
+  color: #dcddde;
+}
+
+
+/* ----- Lista Użytkowników ----- */
+.user-list {
+  width: 240px;
+  background-color: #2f3136; /* Takie samo tło jak kanały */
+  padding: 18px 8px 10px 8px;
+  overflow-y: auto; /* Przewijanie */
+  flex-shrink: 0; /* Zapobiega kurczeniu się */
+}
+.user-group-header {
+  color: #8e9297;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  padding: 0 8px;
+}
+/* Stylizacja zaproszenia do serwera Discord jako karty */
+.discord-invite {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.invite-card {
+  width: 90%;
+  max-width: 400px;
+  background-color: #2f3136;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.invite-banner {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+}
+
+.invite-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.invite-text {
+  padding: 20px;
+  text-align: center;
+}
+
+.invite-text h4 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.invite-text p {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.join-btn {
+  background-color: #48aa10; /* Kolor przycisku podobny do Discorda */
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.join-btn:hover {
+  background-color: #5e6db1;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  margin-bottom: 2px;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #8e9297; /* Domyślnie szary */
+  cursor: pointer;
+}
+.user-item:hover {
+   background-color: rgba(79,84,92,0.32);
+   color: #dcddde;
+}
+
+.user-item .avatar-placeholder {
+  margin-right: 12px;
+  position: relative; /* Dla statusu online */
+}
+.user-item .avatar-placeholder::after { /* Wskaźnik statusu */
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #2f3136; /* Obramowanie w kolorze tła */
+  background-color: #747f8d; /* Domyślnie offline (szary) */
+}
+.user-item .avatar-placeholder.online::after {
+   background-color: #43b581; /* Zielony dla online */
+}
+.user-item .avatar-placeholder.idle::after {
+   background-color: #faa61a; /* Żółty dla idle */
+   /* Można też użyć ikony księżyca FontAwesome zamiast kropki */
+}
+.user-item .avatar-placeholder.dnd::after { /* Do Not Disturb */
+   background-color: #f04747; /* Czerwony */
+}
+
+.user-item.offline {
+  opacity: 0.5; /* Przygaszenie offline */
+  color: #72767d;
+}
+.user-item.offline .avatar-placeholder::after {
+   display: none; /* Ukryj kropkę statusu dla offline w tym podejściu */
+}
+
+.user-status {
+  color: #72767d;
+  font-size: 12px;
+  margin-left: 4px;
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nome Developer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Ikony Font Awesome -->
+</head>
+<body>
+    <div class="discord-container">
+        <!-- Lista Serwerów (Bardzo uproszczona) -->
+        <div class="server-list">
+            <div class="server-icon active-server">
+                <img src="./img/lolosr.png" alt="Server 1">
+            </div>
+             <div class="server-icon add-server">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+
+        <!-- Panel Kanałów i Informacji o Serwerze -->
+        <div class="channel-list">
+            <div class="server-name">
+                <h3>Strefa Roblox<i class="fas fa-chevron-down"></i></h3>
+            </div>
+            <div class="channels">
+                <div class="category-header">
+                    <i class="fas fa-chevron-down icon-small"></i> ╰┈➤   │💼│W A Ż N E
+                </div>
+                <div class="channel-item active-channel">
+                    <i class="fas fa-hashtag icon-channel"></i>
+                    <span>📣〡ogłoszenia</span>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="avatar-placeholder" style="background-image: url('./img/image.webp'); background-size: cover;"></div>
+                 <div class="user-name-tag">
+                     <strong>Totek 😸</strong>
+                     <span>Kochu Oskuś</span>
+                 </div>
+                 <div class="user-controls">
+                     <i class="fas fa-microphone"></i>
+                     <i class="fas fa-headphones"></i>
+                     <i class="fas fa-cog"></i>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Główny Obszar (Czat) -->
+        <div class="main-content">
+            <div class="channel-header">
+                <i class="fas fa-hashtag header-icon"></i>
+                <span id="main-channel-name">📣〡ogłoszenia</span>
+                 <span class="channel-topic">Tutaj znajdziesz ogłoszenia o wszystkim i o niczym</span>
+                 <div class="header-icons">
+                    <i class="fas fa-bell"></i>
+                    <i class="fas fa-thumbtack"></i>
+                    <i class="fas fa-user-friends"></i>
+                    <input type="text" placeholder="Szukaj">
+                    <i class="fas fa-inbox"></i>
+                    <i class="fas fa-question-circle"></i>
+                 </div>
+            </div>
+            <div class="chat-area">
+                <!-- Przykładowe wiadomości -->
+                <div class="message">
+                    <div class="avatar-placeholder" style="background-image: url('./img/Pasted-20240916-184059_preview_r\ \(1\).png'); background-size: cover;"></div>
+                    <div class="message-content">
+                        <span class="username"><span style="color: #ffd344;"> Nome</span> <span class="timestamp">Dzisiaj o 10:30</span></span>
+                        <p>Musisz wygrać i panować, Albo przegrać w nędzy żyć, Cierpieć albo tryumfować, Młotem lub kowadłem być</p>
+                    </div>
+                </div>
+                <div class="message">
+                    <div class="avatar-placeholder" style="background-image: url('./img/2f98bdd510630b870f40fc125b4957c0.webp'); background-size: cover;"></div>
+                    <div class="message-content">
+                        <span class="username"><span style="color: #98caff;"> Hintsu 😸</span> <span class="timestamp">Dzisiaj o 10:35</span></span>
+                        <p>W tym właśnie punkcie język potoczny rezygnuje i wychodzi na piwo. </p>
+                    </div>
+                </div>
+                 <div class="message">
+                    <div class="avatar-placeholder" style="background-image: url('./img/5825f7cf91188c93d385ff6f61813a49.webp'); background-size: cover;"></div>
+                    <div class="message-content">
+                        <span class="username"><span style="color: #98caff;"> Murder</span> <span class="timestamp">Dzisiaj o 10:38</span></span>
+                        <p>Co jest w garnku?</p>
+                        <p>zupa z elfów i cebuli dobra chcesz jest?</p>
+                        <p>Nie lubie cebuli</p>
+                        <p>głupiś elf z cebulą dobry jak pomidor.</p>
+                    </div>
+                </div>
+                <div class="message">
+                    <div class="avatar-placeholder" style="background-image: url('./img/lolosr.png'); background-size: cover;"></div>
+                    <div class="message-content">
+                        <span class="username"><span style="color: #12b8b8;"> Dev Strefa</span> <span class="bot-tag">APL.</span> <span class="timestamp">Dzisiaj o 10:31</span></span>
+                        <div class="discord-invite">
+                            <div class="invite-card">
+                                <div class="invite-banner">
+                                    <img src="./img/banernnnnm.webp" alt="Baner zaproszenia" class="invite-image">
+                                </div>
+                                <div class="invite-text">
+                                    <h4>Strefa Roblox - Społeczność roblox Polska</h4>
+                                    <p></p>
+                                    <a href="https://discord.gg/sqF3DdytKn" target="_blank" class="join-btn">Dołącz</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="discord-invite">
+                            <div class="invite-card">
+                                <div class="invite-banner">
+                                    <img src="./img/baner.png" alt="Baner zaproszenia" class="invite-image">
+                                </div>
+                                <div class="invite-text">
+                                    <h4>Niedługo Dostępny</h4>
+                                    <p></p>
+                                    <a href="https://discord.gg/sqF3DdytKn" target="_blank" class="join-btn">Dołącz</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="message-input-area">
+                <div class="input-wrapper">
+                   <i class="fas fa-plus-circle input-icon"></i>
+                   <input type="text" placeholder="Napisz wiadomość na #ogólny">
+                   <i class="fas fa-gift input-icon"></i>
+                   <i class="fas fa-file-image input-icon"></i>
+                   <i class="fas fa-smile input-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista Użytkowników -->
+        <div class="user-list">
+            <div class="user-group-header">𝘼𝘿𝙈 | Złota Rączka - 1</div>
+        
+            <div class="user-item">
+                <div class="avatar-wrapper online">
+                    <img src="./img/Pasted-20240916-184059_preview_r (1).png" class="avatar" />
+                </div>
+                <span style="color: #ffd344;"> Nome</span>
+            </div>
+        
+            <div class="user-group-header">𝘼𝘿𝙈 | Developer DC - 1</div>
+        
+            <div class="user-item">
+                <div class="avatar-wrapper online">
+                    <img src="./img/lolosr.png" class="avatar" />
+                </div>
+                <span style="color: #12b8b8;"> Dev Strefa <span class="bot-tag small-bot-tag">APL.</span></span>
+            </div>
+        
+            <div class="user-group-header">𝙐𝙎𝙀𝙍 | Użytkownik — 3</div>
+        
+            <div class="user-item">
+                <div class="avatar-wrapper online">
+                    <img src="./img/2f98bdd510630b870f40fc125b4957c0.webp" class="avatar" />
+                </div>
+                <span style="color: #98caff;"> Hintsu 😸</span>
+            </div>
+
+            <div class="user-item">
+                <div class="avatar-wrapper online">
+                    <img src="./img/5825f7cf91188c93d385ff6f61813a49.webp" class="avatar" />
+                </div>
+                <span style="color: #98caff;"> Murder</span>
+            </div>
+            
+            <div class="user-item">
+                <div class="avatar-wrapper online">
+                    <img src="./img/image.webp " class="avatar" />
+                </div>
+                <span style="color: #98caff;"> Totek 😸</span>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
