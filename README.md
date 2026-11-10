@@ -1,7 +1,7 @@
 # Discord UI Recreation
 
 <p align="center">
-  ![Podgląd konfiguracji](img/discord-preview.png)
+  ![Discord UI Preview](images/discord-preview.png)
 </p>
 
 
