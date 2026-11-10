@@ -1,7 +1,7 @@
 # Discord UI Recreation
 
 <p align="center">
-  <img src="img/discord-preview.png" alt="Discord UI Preview" width="90%" style="border-radius: 15px;">
+  <img src="/img/discord-preview.png" alt="Discord UI Preview" width="90%" style="border-radius: 15px;">
 </p>
 
 
