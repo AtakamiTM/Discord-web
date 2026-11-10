@@ -1,5 +1,10 @@
 # Discord UI Recreation
 
+<p align="center">
+  <img src="img/discord-preview.png" alt="Discord UI Preview" width="90%" style="border-radius: 15px;">
+</p>
+
+
 This project aims to recreate the user interface of the popular communication application, Discord. Using HTML, CSS, and JavaScript, a visual copy of the main UI elements has been created to mimic the structure and layout of the app. The following components have been implemented:
 
 ## Features:
