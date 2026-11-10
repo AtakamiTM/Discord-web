@@ -1,556 +1,885 @@
-/* Podstawowy reset i czcionka */
+/* ===== Zmienne motywu ===== */
+:root {
+  --bg-0: #0b0c10;
+  --bg-1: #111318;
+  --bg-2: #171a21;
+  --bg-3: #1d212a;
+  --bg-4: #262b36;
+  --border: rgba(255, 255, 255, 0.06);
+  --text: #e3e5ea;
+  --text-muted: #9aa0ad;
+  --text-faint: #6b7180;
+  --accent: #6d7cff;
+  --accent-2: #a569ff;
+  --accent-grad: linear-gradient(135deg, #5865f2 0%, #a569ff 100%);
+  --green: #3ddc97;
+  --yellow: #f7b84b;
+  --red: #f0585b;
+  --radius: 12px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --font: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
-  font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Czcionka podobna do Discorda */
-  background-color: #36393f; /* Główne tło Discorda */
-  color: #dcddde; /* Domyślny kolor tekstu */
-  overflow: hidden; /* Zapobiega przewijaniu całej strony */
+  font-family: var(--font);
+  background: var(--bg-0);
+  color: var(--text);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+::selection {
+  background: rgba(109, 124, 255, 0.4);
+}
+
+/* Paski przewijania */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-4) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-4);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #343a49;
 }
 
 .discord-container {
   display: flex;
-  height: 100vh; /* Cała wysokość okna */
+  height: 100vh;
+  background:
+    radial-gradient(900px 500px at 15% -10%, rgba(88, 101, 242, 0.14), transparent 60%),
+    radial-gradient(700px 500px at 100% 110%, rgba(165, 105, 255, 0.1), transparent 60%),
+    var(--bg-1);
 }
 
-/* ----- Lista Serwerów ----- */
+/* ===== Przyciski ikon ===== */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  transition: background 0.15s var(--ease), color 0.15s var(--ease), transform 0.15s var(--ease);
+}
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+.icon-btn:active {
+  transform: scale(0.92);
+}
+.icon-btn.active {
+  color: #fff;
+}
+.icon-btn.off {
+  color: var(--red);
+  background: rgba(240, 88, 91, 0.12);
+}
+.icon-btn:focus-visible,
+.send-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ===== Lista serwerów ===== */
 .server-list {
-  width: 72px;
-  background-color: #202225; /* Ciemniejsze tło dla listy serwerów */
-  padding-top: 12px;
+  width: 76px;
+  background: var(--bg-0);
+  padding: 14px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-y: auto; /* Przewijanie, jeśli jest dużo serwerów */
-  flex-shrink: 0; /* Zapobiega kurczeniu się */
+  gap: 10px;
+  overflow-y: auto;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
 }
 
 .server-icon {
   width: 50px;
   height: 50px;
-  background-color: #36393f; /* Tło ikon serwerów */
-  border-radius: 80%; /* Okrągłe ikony */
-  margin-bottom: 8px;
+  background: var(--bg-3);
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: border-radius 0.15s ease-out, background-color 0.15s ease-out;
-  position: relative; /* Dla wskaźnika aktywnego serwera */
+  position: relative;
+  flex-shrink: 0;
+  transition: border-radius 0.25s var(--ease), background 0.2s, transform 0.2s var(--ease), box-shadow 0.2s;
 }
-
 .server-icon img {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  object-fit: cover; /* Dopasowanie obrazka */
+  border-radius: inherit;
+  object-fit: cover;
 }
-
-
 .server-icon:hover {
-  border-radius: 16px; /* Zaokrąglenie przy najechaniu */
-  background-color: #36393f; /* Kolor akcentu Discorda */
+  border-radius: 16px;
+  transform: translateY(-1px);
 }
 .server-icon.active-server {
-   border-radius: 16px; /* Aktywny serwer ma już zaokrąglenie */
-   background-color: #36393f;
+  border-radius: 16px;
+  box-shadow: 0 0 0 2px var(--bg-0), 0 0 0 4px var(--accent), 0 8px 24px rgba(109, 124, 255, 0.35);
 }
-.server-icon.active-server::before { /* Wskaźnik aktywnego serwera */
+.server-icon.active-server::before,
+.server-icon:not(.active-server):not(.add-server)::before {
   content: '';
   position: absolute;
-  left: -12px; /* Pozycjonowanie paska */
+  left: -13px;
   top: 50%;
   transform: translateY(-50%);
   width: 4px;
-  height: 40px; /* Wysokość paska - dostosuj */
-  background-color: white;
+  height: 36px;
+  background: #fff;
   border-radius: 0 4px 4px 0;
+  transition: height 0.2s var(--ease);
 }
-.server-icon.active-server:hover::before { /* Dostosuj dla hover */
-   height: 20px;
+.server-icon.active-server:hover::before {
+  height: 24px;
 }
 
+.server-divider {
+  width: 32px;
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+}
 
 .server-icon.add-server {
-  background-color: #36393f;
-  color: #43B581; /* Zielony Discorda */
-  font-size: 24px;
+  color: var(--green);
+  font-size: 20px;
+  background: var(--bg-3);
 }
 .server-icon.add-server:hover {
-  background-color: #43B581;
-  color: white;
+  background: var(--green);
+  color: #07130d;
 }
 
-/* ----- Lista Kanałów ----- */
+/* Podpowiedzi */
+.server-icon[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: fixed;
+  left: 84px;
+  background: #000;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.15s, transform 0.15s var(--ease);
+  z-index: 50;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+.server-icon[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ===== Lista kanałów ===== */
 .channel-list {
-  width: 240px;
-  background-color: #2f3136; /* Tło listy kanałów */
+  width: 260px;
+  background: var(--bg-2);
   display: flex;
   flex-direction: column;
-  flex-shrink: 0; /* Zapobiega kurczeniu się */
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
 }
 
 .server-name {
-  padding: 18px 16px;
-  border-bottom: 1px solid rgba(0,0,0,0.2); /* Subtelna linia */
+  padding: 0 16px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.15s;
+}
+.server-name::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(88, 101, 242, 0.22), rgba(165, 105, 255, 0.05) 60%, transparent);
+  pointer-events: none;
+}
+.server-name:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.server-name h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 700;
   color: #fff;
+  letter-spacing: 0.2px;
+  position: relative;
 }
 .server-name i {
-  float: right; /* Ikona strzałki po prawej */
-  font-size: 12px;
+  font-size: 11px;
   opacity: 0.6;
-  margin-top: 4px;
 }
 
 .channels {
-  flex-grow: 1; /* Zajmuje dostępną przestrzeń */
-  padding: 18px 8px 0 16px;
-  overflow-y: auto; /* Przewijanie */
+  flex: 1;
+  padding: 18px 10px 0 10px;
+  overflow-y: auto;
 }
+
 .category-header {
-  color: #8e9297; /* Szary kolor nagłówków */
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-  padding-right: 8px;
   display: flex;
   align-items: center;
+  gap: 4px;
+  color: var(--text-faint);
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 0 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.category-header:hover {
+  color: var(--text);
 }
 .icon-small {
-  font-size: 10px;
-  margin-right: 4px;
-  opacity: 0.6;
+  font-size: 9px;
+  width: 12px;
 }
 
 .channel-item {
-  display: flex;
-  align-items: center;
-  padding: 6px 8px;
-  margin-bottom: 2px;
-  border-radius: 4px;
-  cursor: pointer;
-  color: #8e9297; /* Domyślny kolor kanału */
-  font-weight: 500;
-}
-.channel-item:hover {
-  background-color: rgba(79,84,92,0.32); /* Tło przy najechaniu */
-  color: #dcddde; /* Jaśniejszy tekst przy najechaniu */
-}
-.channel-item.active-channel {
-  background-color: rgba(79,84,92,0.6); /* Aktywny kanał */
-  color: #fff; /* Biały tekst dla aktywnego */
-}
-.icon-channel {
-  margin-right: 6px;
-  font-size: 16px; /* Rozmiar ikon kanałów */
-  width: 18px; /* Stała szerokość dla wyrównania */
-  text-align: center;
-  opacity: 0.4; /* Lekko przygaszone ikony */
-}
-.channel-item.active-channel .icon-channel {
-  opacity: 1; /* Pełna widoczność ikony aktywnego */
-}
-.user-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 4px 0;
+  padding: 8px 10px;
+  margin-bottom: 2px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 15px;
+  transition: background 0.15s, color 0.15s, transform 0.15s var(--ease);
+}
+.channel-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  transform: translateX(2px);
+}
+.channel-item.active-channel {
+  background: linear-gradient(90deg, rgba(109, 124, 255, 0.2), rgba(109, 124, 255, 0.06));
+  color: #fff;
+}
+.channel-item.active-channel::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 8px;
+  bottom: 8px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--accent-grad);
+}
+.icon-channel {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+  opacity: 0.5;
+}
+.channel-item.active-channel .icon-channel {
+  opacity: 1;
+  color: var(--accent);
 }
 
-.avatar-wrapper {
-  position: relative;
-  width: 32px;
-  height: 32px;
+/* ===== Panel użytkownika ===== */
+.user-info {
+  margin: 10px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.user-name-tag {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.25;
+}
+.user-name-tag strong {
+  display: block;
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-name-tag span {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-controls {
+  display: flex;
+  gap: 2px;
+}
+.user-controls .icon-btn {
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
 }
 
+/* ===== Avatary ===== */
 .avatar {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
+  background: var(--bg-4);
+  display: block;
 }
-
-.avatar-wrapper::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 2px solid #2f3136; /* kolor tła listy użytkowników */
-}
-
-.avatar-wrapper.online::after {
-  background-color: #43b581;
-}
-
-.avatar-wrapper.idle::after {
-  background-color: #faa61a;
-}
-
-.avatar-wrapper.offline::after {
-  background-color: #747f8d;
-}
-
-.user-info {
-  background-color: #292b2f; /* Ciemniejsze tło paska użytkownika */
-  padding: 8px;
-  display: flex;
-  align-items: center;
-}
-.avatar-placeholder {
-  width: 40px;
-  height: 40px;
-  background-color: transparent; /* Domyślny kolor avatara */
-  border-radius: 50%;
-  margin-right: 8px;
+.avatar-wrapper {
+  position: relative;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
 }
+.avatar-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 3px solid var(--bg-2);
+  background: var(--text-faint);
+}
+.user-info .avatar-wrapper::after {
+  border-color: var(--bg-3);
+}
+.avatar-wrapper.online::after { background: var(--green); }
+.avatar-wrapper.idle::after { background: var(--yellow); }
+.avatar-wrapper.offline::after { background: var(--text-faint); }
+
 .rank-admin {
-  color: #f04747; /* czerwony – admin */
-  font-weight: bold;
+  color: var(--red);
+  font-weight: 700;
 }
-.rank-moderator {
-  color: #43b581; /* zielony – moderator */
-}
-.rank-vip {
-  color: #faa61a; /* złoty – VIP */
-}
-.rank-member {
-  color: #7289da; /* niebieski – zwykły użytkownik */
-}
+.rank-moderator { color: var(--green); }
+.rank-vip { color: var(--yellow); }
+.rank-member { color: var(--accent); }
 
-.avatar-placeholder.small-avatar {
-  width: 32px;
-  height: 32px;
-}
-.user-name-tag {
-  flex-grow: 1; /* Zajmuje dostępną przestrzeń */
-  font-size: 14px;
-  line-height: 1.2;
-}
-.user-name-tag strong {
-  color: #fff;
-  display: block; /* Nazwa użytkownika w nowej linii */
-}
-.user-name-tag span {
-  font-size: 12px;
-  color: #b9bbbe; /* Szary kolor taga */
-}
-.user-controls i {
-  color: #b9bbbe;
-  margin-left: 8px;
-  cursor: pointer;
-  padding: 4px; /* Łatwiej kliknąć */
-  font-size: 16px;
-  opacity: 0.7;
-}
-.user-controls i:hover {
-  opacity: 1;
-  color: #fff;
-}
-
-
-/* ----- Główny Obszar (Czat) ----- */
+/* ===== Główny obszar ===== */
 .main-content {
-  flex-grow: 1; /* Zajmuje resztę przestrzeni */
-  background-color: #36393f; /* Główne tło */
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  background: var(--bg-1);
 }
 
 .channel-header {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(0,0,0,0.2);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.2), 0 1.5px 0 rgba(0,0,0,0.05), 0 2px 0 rgba(0,0,0,0.05); /* Cień pod nagłówkiem */
+  gap: 10px;
+  height: 56px;
+  padding: 0 16px;
+  background: rgba(17, 19, 24, 0.75);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
   color: #fff;
   font-size: 16px;
-  font-weight: 600;
-  flex-shrink: 0; /* Nie kurczy się */
+  font-weight: 700;
+  flex-shrink: 0;
+  z-index: 2;
 }
 .header-icon {
-  color: #72767d; /* Szara ikona hash */
-  font-size: 20px;
-  margin-right: 8px;
+  color: var(--text-faint);
+  font-size: 18px;
+}
+#main-channel-name {
+  white-space: nowrap;
 }
 .channel-topic {
-  color: #b9bbbe;
+  color: var(--text-muted);
   font-size: 13px;
   font-weight: 400;
-  margin-left: 12px;
   padding-left: 12px;
-  border-left: 1px solid #4f545c; /* Separator */
+  border-left: 1px solid var(--bg-4);
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Ukrywanie długiego tematu */
-  max-width: 30%; /* Ograniczenie szerokości tematu */
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .header-icons {
-  margin-left: auto; /* Przesuwa ikony na prawo */
+  margin-left: auto;
   display: flex;
   align-items: center;
-  color: #b9bbbe;
+  gap: 4px;
+  flex-shrink: 0;
 }
-.header-icons i {
-  margin-left: 16px;
-  cursor: pointer;
-  font-size: 18px;
-  opacity: 0.8;
-}
-.header-icons i:hover {
-   opacity: 1;
-   color: #fff;
-}
-.header-icons input[type="text"] {
-  background-color: #202225; /* Ciemne tło wyszukiwarki */
-  border: none;
-  border-radius: 4px;
-  padding: 4px 8px;
-  color: #dcddde;
-  font-size: 13px;
-  margin-left: 16px;
-  width: 144px; /* Stała szerokość */
-}
-.header-icons input::placeholder {
-  color: #72767d;
+.header-icons .icon-btn {
+  font-size: 16px;
 }
 
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 6px;
+}
+.search-box input {
+  width: 150px;
+  background: var(--bg-0);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 30px 7px 12px;
+  color: var(--text);
+  font: 400 13px var(--font);
+  outline: none;
+  transition: width 0.25s var(--ease), border-color 0.2s, box-shadow 0.2s;
+}
+.search-box input:focus {
+  width: 220px;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(109, 124, 255, 0.2);
+}
+.search-box input::placeholder {
+  color: var(--text-faint);
+}
+.search-box i {
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  color: var(--text-faint);
+  pointer-events: none;
+}
+
+/* ===== Czat ===== */
 .chat-area {
-  flex-grow: 1; /* Zajmuje dostępną przestrzeń */
-  overflow-y: auto; /* Przewijanie czatu */
-  padding: 16px 16px 0 16px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 16px 8px;
+}
+
+.welcome {
+  padding: 8px 8px 20px;
+}
+.welcome-icon {
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-grad);
+  color: #fff;
+  font-size: 30px;
+  margin-bottom: 14px;
+  box-shadow: 0 10px 30px rgba(109, 124, 255, 0.4);
+}
+.welcome h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.welcome p {
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.date-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 8px 14px;
+  color: var(--text-faint);
+  font-size: 12px;
+  font-weight: 600;
+}
+.date-divider::before,
+.date-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }
 
 .message {
   display: flex;
-  margin-bottom: 16px;
-  padding: 4px 0; /* Odstęp dla hover */
+  gap: 16px;
+  padding: 8px 12px;
+  margin-bottom: 2px;
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.15s;
+  animation: msg-in 0.35s var(--ease) both;
 }
 .message:hover {
-  background-color: rgba(4,4,5,0.07); /* Lekkie tło przy najechaniu */
+  background: rgba(255, 255, 255, 0.03);
 }
-
-.message .avatar-placeholder {
-  width: 40px;
-  height: 40px;
-  margin-right: 16px;
-  margin-top: 4px;
+.message > .avatar {
+  width: 42px;
+  height: 42px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s;
 }
-.avatar-placeholder.other-color {
-  background-color: #43B581; /* Inny kolor dla bota */
+.message:hover > .avatar {
+  transform: scale(1.05);
 }
-.avatar-placeholder.another-user {
-   background-color: #FAA61A; /* Inny kolor dla innego usera */
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
 }
-
 
 .message-content {
-  flex-grow: 1;
+  flex: 1;
+  min-width: 0;
+}
+.message-meta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 2px;
 }
 .message-content .username {
-  color: #fff; /* Biały nick */
-  font-weight: 500;
-  margin-right: 8px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+.message-content .username:hover {
+  text-decoration: underline;
 }
 .message-content .timestamp {
-  color: #72767d; /* Szary czas */
-  font-size: 12px;
-  margin-left: 8px;
+  color: var(--text-faint);
+  font-size: 11.5px;
 }
 .message-content p {
-  line-height: 1.375rem; /* Odstęp między liniami */
-  color: #dcddde; /* Kolor tekstu wiadomości */
-  word-wrap: break-word; /* Zawijanie długich słów */
+  line-height: 1.5;
+  color: var(--text);
+  font-size: 15px;
+  overflow-wrap: anywhere;
 }
+
 .bot-tag {
-  background-color: #7289da;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--accent-grad);
   color: #fff;
   font-size: 10px;
-  padding: 1px 4px;
-  border-radius: 3px;
-  font-weight: 500;
-  vertical-align: baseline;
-  margin-left: 4px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  line-height: 1.2;
+  align-self: center;
+}
+.bot-tag i {
+  font-size: 8px;
 }
 .small-bot-tag {
   font-size: 9px;
-  padding: 0px 3px;
+  padding: 1px 5px;
+  margin-left: 4px;
 }
 
-.message-input-area {
-  padding: 0 16px 24px 16px; /* Odstępy pola wpisywania */
-  flex-shrink: 0; /* Nie kurczy się */
-}
-.input-wrapper {
-  background-color: #40444b; /* Tło pola wpisywania */
-  border-radius: 8px;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-}
-.input-wrapper input[type="text"] {
-  flex-grow: 1;
-  background: none;
-  border: none;
-  padding: 11px 0; /* Wewnętrzne odstępy */
-  color: #dcddde;
-  font-size: 1rem; /* Rozmiar tekstu w polu */
-  margin: 0 10px;
-}
-.input-wrapper input::placeholder {
-  color: #72767d;
-}
-.input-icon {
-  color: #b9bbbe;
-  font-size: 22px; /* Rozmiar ikon */
-  cursor: pointer;
-  padding: 8px; /* Łatwiej kliknąć */
-}
-.input-icon:hover {
-  color: #dcddde;
+/* Własne wiadomości */
+.message.own .username {
+  color: var(--accent);
 }
 
-
-/* ----- Lista Użytkowników ----- */
-.user-list {
-  width: 240px;
-  background-color: #2f3136; /* Takie samo tło jak kanały */
-  padding: 18px 8px 10px 8px;
-  overflow-y: auto; /* Przewijanie */
-  flex-shrink: 0; /* Zapobiega kurczeniu się */
-}
-.user-group-header {
-  color: #8e9297;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-  padding: 0 8px;
-}
-/* Stylizacja zaproszenia do serwera Discord jako karty */
+/* ===== Karty zaproszeń ===== */
 .discord-invite {
   margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
-
 .invite-card {
-  width: 90%;
-  max-width: 400px;
-  background-color: #2f3136;
-  border-radius: 10px;
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  color: white;
+  isolation: isolate;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transition: box-shadow 0.6s var(--smooth), border-color 0.6s var(--smooth);
 }
-
+.invite-card:hover {
+  border-color: rgba(109, 124, 255, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(109, 124, 255, 0.15);
+}
 .invite-banner {
   width: 100%;
-  height: 120px;
+  height: 140px;
   overflow: hidden;
+  position: relative;
+  background: var(--bg-2);
+  transition: height 0.6s var(--smooth);
 }
-
+.invite-card:hover .invite-banner {
+  height: 190px;
+}
+.invite-banner::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: -1px;
+  background: linear-gradient(180deg, transparent 45%, var(--bg-2) 100%);
+}
 .invite-image {
+  display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
+  transform: scale(1);
+  will-change: transform;
+  transition: transform 0.9s var(--smooth);
 }
-
+.invite-card:hover .invite-image {
+  transform: scale(1.12);
+}
 .invite-text {
-  padding: 20px;
-  text-align: center;
+  padding: 14px 18px 18px;
 }
-
+.invite-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
 .invite-text h4 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.invite-text p {
-  font-size: 14px;
-  margin-bottom: 20px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
 }
 
 .join-btn {
-  background-color: #48aa10; /* Kolor przycisku podobny do Discorda */
-  color: white;
-  padding: 12px 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #3ddc97, #1fb870);
+  color: #04140c;
+  font-size: 14px;
+  font-weight: 700;
   text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(61, 220, 151, 0.3);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s, filter 0.2s;
 }
-
 .join-btn:hover {
-  background-color: #5e6db1;
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 10px 24px rgba(61, 220, 151, 0.45);
+}
+.join-btn:active {
+  transform: scale(0.97);
+}
+.join-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
+/* ===== Pole wiadomości ===== */
+.message-input-area {
+  padding: 8px 16px 22px;
+  flex-shrink: 0;
+}
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+.input-wrapper:focus-within {
+  border-color: rgba(109, 124, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(109, 124, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+.input-wrapper input[type='text'] {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 12px 8px;
+  color: var(--text);
+  font: 400 15px var(--font);
+}
+.input-wrapper input::placeholder {
+  color: var(--text-faint);
+}
+.input-wrapper input:disabled {
+  cursor: not-allowed;
+}
+.input-icon {
+  width: 36px;
+  height: 36px;
+  font-size: 19px;
+}
+.send-btn {
+  width: 38px;
+  height: 38px;
+  margin-left: 4px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--accent-grad);
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 6px 16px rgba(109, 124, 255, 0.4);
+  opacity: 0.45;
+  transform: scale(0.92);
+  transition: opacity 0.2s, transform 0.2s var(--ease);
+}
+.send-btn.ready {
+  opacity: 1;
+  transform: scale(1);
+}
+.send-btn.ready:hover {
+  transform: scale(1.06);
+}
+
+/* ===== Lista użytkowników ===== */
+.user-list {
+  width: 252px;
+  background: var(--bg-2);
+  padding: 20px 10px 10px;
+  overflow-y: auto;
+  flex-shrink: 0;
+  border-left: 1px solid var(--border);
+  transition: margin-right 0.3s var(--ease), opacity 0.25s;
+}
+.user-list.hidden {
+  margin-right: -252px;
+  opacity: 0;
+  pointer-events: none;
+}
+.user-group-header {
+  color: var(--text-faint);
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 14px 0 6px;
+  padding: 0 8px;
+}
+.user-group-header:first-child {
+  margin-top: 0;
+}
 .user-item {
   display: flex;
   align-items: center;
+  gap: 12px;
   padding: 6px 8px;
   margin-bottom: 2px;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 15px;
   font-weight: 600;
-  color: #8e9297; /* Domyślnie szary */
+  color: var(--text-muted);
   cursor: pointer;
+  transition: background 0.15s, transform 0.15s var(--ease);
 }
 .user-item:hover {
-   background-color: rgba(79,84,92,0.32);
-   color: #dcddde;
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(-2px);
 }
-
-.user-item .avatar-placeholder {
-  margin-right: 12px;
-  position: relative; /* Dla statusu online */
+.user-item .avatar-wrapper {
+  width: 34px;
+  height: 34px;
 }
-.user-item .avatar-placeholder::after { /* Wskaźnik statusu */
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 2px solid #2f3136; /* Obramowanie w kolorze tła */
-  background-color: #747f8d; /* Domyślnie offline (szary) */
-}
-.user-item .avatar-placeholder.online::after {
-   background-color: #43b581; /* Zielony dla online */
-}
-.user-item .avatar-placeholder.idle::after {
-   background-color: #faa61a; /* Żółty dla idle */
-   /* Można też użyć ikony księżyca FontAwesome zamiast kropki */
-}
-.user-item .avatar-placeholder.dnd::after { /* Do Not Disturb */
-   background-color: #f04747; /* Czerwony */
-}
-
 .user-item.offline {
-  opacity: 0.5; /* Przygaszenie offline */
-  color: #72767d;
+  opacity: 0.45;
 }
-.user-item.offline .avatar-placeholder::after {
-   display: none; /* Ukryj kropkę statusu dla offline w tym podejściu */
+.user-item.offline .avatar-wrapper::after {
+  display: none;
 }
 
-.user-status {
-  color: #72767d;
-  font-size: 12px;
-  margin-left: 4px;
+/* ===== Responsywność ===== */
+@media (max-width: 1100px) {
+  .channel-topic { display: none; }
+}
+@media (max-width: 980px) {
+  .user-list {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
+    box-shadow: -20px 0 40px rgba(0, 0, 0, 0.5);
+  }
+}
+@media (max-width: 720px) {
+  .server-list { width: 64px; }
+  .server-icon { width: 44px; height: 44px; }
+  .channel-list { width: 200px; }
+  .search-box { display: none; }
+  .welcome h1 { font-size: 22px; }
+}
+@media (max-width: 560px) {
+  .channel-list { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }
